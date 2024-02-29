@@ -10,10 +10,10 @@ FROM viewership;
 ---EX2
 SELECT x, y, z,
 CASE 
-WHEN x = 13 AND y = 15 AND z = 30 THEN 'No' 
-ELSE 'Yes' 
+WHEN x + y > z AND x + z > y AND y + z > x THEN 'Yes' 
+ELSE 'No' 
 END As 'triangle'
-FROM Triangle
+FROM Triangle;
 ---EX3
 SELECT
   ROUND (100.0 * 
