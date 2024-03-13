@@ -1,4 +1,5 @@
 ---Ex1
+/* link: https://datalemur.com/questions/yoy-growth-rate */
 SELECT 
 extract(Year From transaction_date) as Year,
 product_id,
@@ -9,6 +10,7 @@ LAG(spend) Over (partition by product_id order By extract(Year From transaction_
 FROM user_transactions;
 
 ---EX2
+/* lInk: https://datalemur.com/questions/card-launch-success */
 WITH card_launch AS (
   SELECT 
     card_name,
@@ -27,6 +29,7 @@ WHERE issue_date = launch_date
 ORDER BY issued_amount DESC;
 
 ---Ex3
+/* link: https://datalemur.com/questions/sql-third-transaction */
 WITH trans_num AS (
   SELECT 
     user_id, 
@@ -44,6 +47,7 @@ FROM trans_num
 WHERE row_num = 3;
 
 ---EX4
+/* https://datalemur.com/questions/histogram-users-purchases */
 WITH latest_transactions_cte AS (
   SELECT 
     transaction_date, 
@@ -64,6 +68,7 @@ GROUP BY transaction_date, user_id
 ORDER BY transaction_date;
 
 ---EX5
+/*link: https://datalemur.com/questions/rolling-average-tweets */
 SELECT    
   user_id,    
   tweet_date,   
@@ -73,7 +78,9 @@ SELECT
     ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
   ,2) AS rolling_avg_3d
 FROM tweets;
+
 ---EX6
+/*link: https://datalemur.com/questions/repeated-payments */
 WITH payments AS (
   SELECT 
     merchant_id, 
@@ -83,12 +90,16 @@ WITH payments AS (
         ORDER BY transaction_timestamp)
     )/60 AS minute_difference 
   FROM transactions) 
-
+/* using EPOCH to calculate the total number of seconds in a given interval.
+  To calculate the difference in minutes, we divide these seconds by 60 (1 minute = 60 seconds). 
+  For example, the time interval for transaction id 5 is 1 hour and 9 minutes. 
+  EPOCH calculates its value as 4140 seconds. By dividing it by 60, we arrive at 69 minutes.*/
 SELECT COUNT(merchant_id) AS payment_count
 FROM payments 
 WHERE minute_difference <= 10;
 
 ---EX7
+/* https://datalemur.com/questions/sql-highest-grossing */
 WITH ranked_spending_cte AS (
   SELECT 
     category, 
@@ -111,6 +122,7 @@ WHERE ranking <= 2
 ORDER BY category, ranking;
 
 ----EX8
+/*link: https://datalemur.com/questions/top-fans-rank*/
 WITH top_10_cte AS (
   SELECT 
     artists.artist_name,
@@ -124,7 +136,11 @@ WITH top_10_cte AS (
   WHERE ranking.rank <= 10
   GROUP BY artists.artist_name
 )
-
+/* why using DENSE_rank. Cause While both functions assign the same rank to duplicates, 
+  RANK skips the next number in the ranking, 
+  which is not suitable for this question. 
+  Hence, we use DENSE_RANK, which ensures that all ranks are assigned without skipping any numbers.*/
+  
 SELECT artist_name, artist_rank
 FROM top_10_cte
 WHERE artist_rank <= 5;
