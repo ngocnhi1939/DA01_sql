@@ -1,4 +1,5 @@
 ---EX1
+/* link: https://leetcode.com/problems/immediate-food-delivery-ii/?envType=study-plan-v2&envId=top-sql-50 */
 SELECT 
     ROUND(SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT customer_id), 2) AS immediate_percentage
 FROM Delivery
@@ -9,6 +10,7 @@ WHERE (customer_id, order_date) IN (
 );
 
 ---EX2
+/* link: https://leetcode.com/problems/game-play-analysis-iv/description/?envType=study-plan-v2&envId=top-sql-50 */
 SELECT 
     ROUND(COUNT(DISTINCT player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) as fraction
 FROM 
@@ -26,7 +28,8 @@ WHERE
         GROUP BY 
             player_id
     );
-
+/* The Date_sub(date, Interval value interval) function subtract a time/date interval from a date then returns the date */.
+    
 ---EX3
 SELECT CASE
            WHEN s.id % 2 <> 0 AND s.id = (SELECT COUNT(*) FROM Seat) THEN s.id
